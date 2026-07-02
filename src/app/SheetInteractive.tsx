@@ -69,7 +69,7 @@ export default function SheetInteractive({ onClose, onConfirm, onCreateNew, quan
       </div>
 
       {/* Search + Tạo mới */}
-      <div className="relative shrink-0 w-full px-[28px] flex gap-[14px] items-center">
+      <div className="relative shrink-0 w-full px-[28px] pb-[24px] flex gap-[14px] items-center">
         <div className="bg-white relative rounded-[21px] flex-1">
           <div className="flex flex-col justify-center overflow-clip rounded-[21px]">
             <div className="flex flex-col items-start justify-center px-[21px] py-[14px]">

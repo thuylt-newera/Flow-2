@@ -110,9 +110,11 @@ export default function PosLenDonScreen({ allItems, onAdjust, onBack, onCancel, 
                       <p className="flex-[1_0_0] font-['Inter:Semi_Bold',sans-serif] font-semibold leading-[49px] text-[35px] text-black tracking-[-0.6px] whitespace-nowrap">Đơn hàng</p>
                       <div
                         onClick={onAddProduct}
-                        className="content-stretch flex gap-[14px] h-[70px] items-center justify-center px-[28px] relative rounded-[14px] shrink-0 cursor-pointer"
+                        className="bg-white flex gap-[10.5px] h-[56px] items-center justify-center px-[17.5px] relative rounded-[14px] shrink-0 cursor-pointer hover:bg-gray-50 active:opacity-75 transition-colors"
                       >
-                        <p className="font-['Inter:Medium',sans-serif] font-medium leading-[42px] text-[#dc2626] text-[28px] whitespace-nowrap">+ Thêm sản phẩm</p>
+                        <div aria-hidden className="absolute border border-[#a1a1aa] border-solid inset-0 pointer-events-none rounded-[14px]" />
+                        <Plus size={24} color="black" />
+                        <p className="font-['Inter:Medium',sans-serif] font-medium leading-[35px] text-black text-[24.5px] whitespace-nowrap">Thêm sản phẩm</p>
                       </div>
                     </div>
 
