@@ -107,7 +107,7 @@ export default function AddProductSheet({ onClose, onConfirm }: Props) {
               onClick={onClose}
               className="flex items-center justify-center p-[14px] rounded-[14px] shrink-0 size-[56px] cursor-pointer hover:bg-gray-100 transition-colors"
             >
-              <X size={28} color="black" />
+              <X size={36} color="black" />
             </div>
             <div className="flex-1 text-center">
               <p className="font-['Inter:Medium',sans-serif] font-medium text-[31.5px] text-black leading-[49px]">Tạo sản phẩm mới</p>

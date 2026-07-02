@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { X, Minus, Plus } from "lucide-react";
 import imgBg from "@/imports/SheetThemSảnPhẩm/c1902011eccf838e44c12b93ec7db9e53ed05852.png";
 import { PRODUCTS, Product, formatPrice } from "./products";
@@ -45,7 +46,19 @@ export default function SheetInteractive({ onClose, onConfirm, onCreateNew, quan
   quantities: Record<number, number>;
   onAdjust: (i: number, delta: number) => void;
 }) {
+  const [query, setQuery] = useState("");
+  const [focused, setFocused] = useState(false);
+
   const adjust = (i: number, delta: number) => onAdjust(i, delta);
+
+  const q = query.trim().toLowerCase();
+  const filtered = q
+    ? PRODUCTS.map((p, i) => ({ p, i })).filter(({ p }) => p.name.toLowerCase().includes(q))
+    : [];
+
+  const searchBorder = focused
+    ? "border border-[#a1a1aa] shadow-[0px_0px_0px_3px_rgba(148,163,184,0.5)]"
+    : "border border-[#d4d4d8] shadow-[0px_1px_2px_0px_rgba(26,26,26,0.05)] hover:border-[#a1a1aa]";
 
   const handleConfirm = (e: React.MouseEvent) => {
     e.stopPropagation();
@@ -59,7 +72,7 @@ export default function SheetInteractive({ onClose, onConfirm, onCreateNew, quan
       <div className="relative shrink-0 w-full">
         <div className="flex items-center gap-[21px] p-[21px]">
           <div onClick={(e) => { e.stopPropagation(); onClose(); }} className="flex items-center justify-center p-[14px] rounded-[14px] shrink-0 size-[56px] cursor-pointer hover:bg-gray-100 active:bg-gray-200 transition-colors">
-            <X size={28} color="black" />
+            <X size={36} color="black" />
           </div>
           <div className="flex-1 text-center">
             <p className="font-['Inter:Medium',sans-serif] font-medium text-[31.5px] text-black">Thêm sản phẩm</p>
@@ -69,14 +82,40 @@ export default function SheetInteractive({ onClose, onConfirm, onCreateNew, quan
       </div>
 
       {/* Search + Tạo mới */}
-      <div className="relative shrink-0 w-full px-[28px] pb-[24px] flex gap-[14px] items-center">
-        <div className="bg-white relative rounded-[21px] flex-1">
-          <div className="flex flex-col justify-center overflow-clip rounded-[21px]">
-            <div className="flex flex-col items-start justify-center px-[21px] py-[14px]">
-              <p className="font-['Inter:Regular',sans-serif] font-normal leading-[42px] text-[#71717a] text-[28px] whitespace-nowrap">Nhập tên hoặc mã sản phẩm</p>
-            </div>
+      <div className="sheet-search-row relative z-10 shrink-0 w-full px-[28px] pb-[24px] flex gap-[14px] items-center">
+        <div className="relative flex-1" onClick={(e) => e.stopPropagation()}>
+          <div className={`bg-white h-[70px] relative rounded-[21px] ${searchBorder}`}>
+            <input
+              value={query}
+              placeholder="Nhập tên hoặc mã sản phẩm"
+              onChange={(e) => setQuery(e.target.value)}
+              onFocus={() => setFocused(true)}
+              onBlur={() => setFocused(false)}
+              className="absolute inset-0 w-full h-full bg-transparent px-[21px] font-['Inter:Regular',sans-serif] font-normal text-[28px] text-black placeholder-[#71717a] outline-none rounded-[21px]"
+            />
           </div>
-          <div aria-hidden className="absolute border border-[#d4d4d8] border-solid inset-0 pointer-events-none rounded-[21px] shadow-[0px_1px_2px_0px_rgba(26,26,26,0.05)]" />
+          {filtered.length > 0 && (
+            <div className="absolute top-full left-0 right-0 mt-[8px] z-20 bg-white rounded-[21px] border border-[#d4d4d8] shadow-[0px_4px_12px_0px_rgba(26,26,26,0.12)] overflow-hidden max-h-[420px] overflow-y-auto">
+              {filtered.map(({ p, i }) => (
+                <div
+                  key={i}
+                  onClick={() => { adjust(i, 1); setQuery(""); }}
+                  className="flex items-center gap-[14px] px-[21px] py-[14px] cursor-pointer hover:bg-gray-50 active:bg-gray-100 transition-colors"
+                >
+                  <div className="relative size-[70px] shrink-0 rounded-[14px] overflow-hidden bg-[#f4f4f5]">
+                    <img alt="" className="absolute inset-0 max-w-none object-contain size-full" src={p.img} />
+                  </div>
+                  <div className="flex-1 min-w-0 flex flex-col gap-[4px]">
+                    <p className="font-['Inter:Regular',sans-serif] font-normal leading-[36px] text-[28px] text-black line-clamp-2">{p.name}</p>
+                    <div className="flex gap-[3.5px] items-center font-['Inter:Semi_Bold',sans-serif] font-semibold text-black whitespace-nowrap">
+                      <p className="text-[24px]">{formatPrice(p.price)}</p>
+                      <p className="text-[16px]">₫</p>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
         </div>
         <div
           onClick={(e) => { e.stopPropagation(); onCreateNew(); }}
@@ -91,7 +130,7 @@ export default function SheetInteractive({ onClose, onConfirm, onCreateNew, quan
       <div className="flex-1 min-h-0 overflow-y-auto w-full" data-name="List">
         <div className="grid grid-cols-2 gap-[24px] px-[28px] pb-[28px]">
           {PRODUCTS.map((product, i) => (
-            <div key={i} className="bg-white flex flex-col overflow-clip rounded-[21px]" data-name="Product cart">
+            <div key={i} onClick={() => adjust(i, 1)} className="bg-white flex flex-col overflow-clip rounded-[21px] cursor-pointer transition-opacity hover:opacity-90 active:opacity-75" data-name="Product cart">
               <div className="aspect-square relative rounded-[28px] w-full shrink-0">
                 <div aria-hidden className="absolute inset-0 pointer-events-none rounded-[28px]">
                   <img alt="" className="absolute max-w-none object-cover rounded-[28px] size-full" src={imgBg} />

@@ -74,6 +74,9 @@ const globalStyles = `
   [data-name="[Sheet] Thêm sản phẩm"] > div {
     overflow: hidden !important;
   }
+  [data-name="[Sheet] Thêm sản phẩm"] > div.sheet-search-row {
+    overflow: visible !important;
+  }
   [data-name="[Sheet] Thêm sản phẩm"] [data-name="List"] {
     overflow-y: auto !important;
     min-height: 0 !important;
