@@ -12,7 +12,7 @@ export interface Product {
 }
 
 export const PRODUCTS: Product[] = [
-  { name: "Mì Kokomi tôm chua cay",                              price: 9000,   img: imgP1 },
+  { name: "Mì Kokomi tôm chua cay",                              price: 2800,   img: imgP1 },
   { name: "Nước mắm Chin-Su ủ chượp 365 - 40N thủy tinh 700ml", price: 75000,  img: imgP2 },
   { name: "Tương ớt Chinsu chai 250g",                           price: 18000,  img: imgP3 },
   { name: "Mì Kokomi Pro canh chua nam bộ",                      price: 5000,   img: imgP4 },
