@@ -2,7 +2,6 @@ import { useEffect, useRef, useState } from "react";
 import PosLenDonScreen from "./PosLenDonScreen";
 import { PRODUCTS } from "./products";
 import Dialog from "@/imports/Dialog-1/index";
-import Toast from "@/imports/Toast/index";
 import SheetInteractive, { OrderItem } from "./SheetInteractive";
 import ChiTietDonScreen from "./ChiTietDonScreen";
 import AddProductSheet from "./AddProductSheet";
@@ -12,6 +11,12 @@ import successSoundUrl from "@/imports/Thanh_toa_n_tha_nh_.MP3";
 
 const DESIGN_W = 1920;
 const DESIGN_H = 1200;
+
+/* Toast placement (design coords) — centered in the Manual-area column,
+   sitting 24px above the sticky footer, or 24px above bottom padding when there's no footer. */
+const MANUAL_CENTER_X = 1433; // Manual-area column center (x=974, width=918)
+const TOAST_BOTTOM_WITH_BAR = 269; // 24px above sticky footer top (y=955)
+const TOAST_BOTTOM_NO_BAR = 52; // 24px above 28px bottom padding
 
 const globalStyles = `
   [data-name="gradient"] {
@@ -86,12 +91,6 @@ const globalStyles = `
     height: auto !important;
   }
 
-  /* Fix Toast content width */
-  [data-name="Toast"] [data-name="Content"] {
-    width: auto !important;
-    flex: 1 !important;
-  }
-
   /* Brand buttons (Tiếp tục, Thêm sản phẩm, Huỷ đơn in dialog) */
   [data-name="Brand Button"] {
     cursor: pointer;
@@ -111,6 +110,13 @@ type Screen = "home" | "len-don" | "chi-tiet-don" | "thanh-toan";
 export default function App() {
   const containerRef = useRef<HTMLDivElement>(null);
   const [scale, setScale] = useState(1);
+  const [viewport, setViewport] = useState(() => ({
+    w: typeof window !== "undefined" ? window.innerWidth : DESIGN_W,
+    h: typeof window !== "undefined" ? window.innerHeight : DESIGN_H,
+  }));
+  const isTouch =
+    typeof window !== "undefined" &&
+    window.matchMedia("(pointer: coarse)").matches;
   const [screen, setScreen] = useState<Screen>("home");
   const [showDialog, setShowDialog] = useState(false);
   const [orderItems, setOrderItems] = useState<OrderItem[]>([]);
@@ -167,11 +173,16 @@ export default function App() {
     function update() {
       const vw = window.innerWidth;
       const vh = window.innerHeight;
+      setViewport({ w: vw, h: vh });
       setScale(Math.min(vw / DESIGN_W, vh / DESIGN_H));
     }
     update();
     window.addEventListener("resize", update);
-    return () => window.removeEventListener("resize", update);
+    window.addEventListener("orientationchange", update);
+    return () => {
+      window.removeEventListener("resize", update);
+      window.removeEventListener("orientationchange", update);
+    };
   }, []);
 
   const triggerToast = () => {
@@ -216,6 +227,7 @@ export default function App() {
 
   const scaledW = DESIGN_W * scale;
   const scaledH = DESIGN_H * scale;
+  const isPortrait = isTouch && viewport.h > viewport.w;
 
   return (
     <>
@@ -223,10 +235,12 @@ export default function App() {
       <div
         ref={containerRef}
         style={{
-          width: "100vw",
-          height: "100vh",
+          width: viewport.w,
+          height: viewport.h,
           overflow: "hidden",
-          position: "relative",
+          position: "fixed",
+          top: 0,
+          left: 0,
           background: "#f4f4f5",
           display: "flex",
           alignItems: "center",
@@ -352,9 +366,9 @@ export default function App() {
               </div>
             )}
 
-            {/* Success toast — bottom right of screen */}
+            {/* Success toast — home screen has no bottom bar */}
             {successToast && (
-              <div style={{ position: "absolute", bottom: 60, right: 56, zIndex: 80, pointerEvents: "none" }}>
+              <div style={{ position: "absolute", bottom: TOAST_BOTTOM_NO_BAR, left: MANUAL_CENTER_X, transform: "translateX(-50%)", zIndex: 80, pointerEvents: "none" }}>
                 <div className="flex items-center gap-[14px] overflow-clip px-[28px] py-[21px] rounded-[14px] shadow-[0px_4px_6px_-4px_rgba(26,26,26,0.05),0px_10px_15px_-3px_rgba(26,26,26,0.05)]" style={{ background: "#16a34a" }}>
                   <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="9 12 11 14 15 10"/></svg>
                   <p className="font-['Inter:Semi_Bold',sans-serif] font-semibold leading-[42px] text-[28px] text-white whitespace-nowrap">Thanh toán thành công</p>
@@ -362,14 +376,14 @@ export default function App() {
               </div>
             )}
 
-            {/* Inventory toast — bottom center of right panel */}
+            {/* Inventory toast — Manual-area, above the bottom bar */}
             {inventoryToast && (
               <div
                 style={{
                   position: "absolute",
-                  bottom: 200,
-                  left: "50%",
-                  transform: "translateX(10%)",
+                  bottom: TOAST_BOTTOM_WITH_BAR,
+                  left: MANUAL_CENTER_X,
+                  transform: "translateX(-50%)",
                   zIndex: 80,
                   pointerEvents: "none",
                 }}
@@ -387,28 +401,56 @@ export default function App() {
               </div>
             )}
 
-            {/* Toast above summary row, centered in right panel */}
+            {/* Validation toast — Manual-area, above the bottom bar */}
             {showToast && (
               <div
                 style={{
                   position: "absolute",
-                  // Bottom bar = ButtonGroup (~126px) + Summary (~91px) = ~217px from bottom
-                  bottom: 230,
-                  // Right panel center: 28px padding + 918px left col + 28px gap + 918px/2 ≈ 1433px center
-                  // Toast width 560px → left = 1433 - 280 = 1153px
-                  left: 1153,
-                  width: 560,
-                  height: 84,
-                  zIndex: 40,
+                  bottom: TOAST_BOTTOM_WITH_BAR,
+                  left: MANUAL_CENTER_X,
+                  transform: "translateX(-50%)",
+                  zIndex: 80,
                   pointerEvents: "none",
                 }}
               >
-                <Toast />
+                <div className="bg-black flex items-center overflow-clip px-[28px] py-[21px] rounded-[14px] shadow-[0px_4px_6px_-4px_rgba(26,26,26,0.05),0px_10px_15px_-3px_rgba(26,26,26,0.05)]">
+                  <p className="font-['Inter:Semi_Bold',sans-serif] font-semibold leading-[42px] text-[28px] text-white whitespace-nowrap">Vui lòng thêm sản phẩm</p>
+                </div>
               </div>
             )}
           </div>
         </div>
       </div>
+
+      {/* Rotate-to-landscape prompt — this is a landscape layout */}
+      {isPortrait && (
+        <div
+          style={{
+            position: "fixed",
+            inset: 0,
+            zIndex: 100,
+            background: "#fafafa",
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            justifyContent: "center",
+            gap: 24,
+            padding: 32,
+            textAlign: "center",
+          }}
+        >
+          <svg width="72" height="72" viewBox="0 0 24 24" fill="none" stroke="#dc2626" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+            <path d="M21 12a9 9 0 1 1-9-9c2.52 0 4.93 1 6.74 2.74L21 8" />
+            <path d="M21 3v5h-5" />
+          </svg>
+          <p style={{ fontFamily: "'Inter:Semi_Bold',sans-serif", fontWeight: 600, fontSize: 22, color: "#18181b", margin: 0 }}>
+            Vui lòng xoay ngang thiết bị
+          </p>
+          <p style={{ fontFamily: "'Inter:Regular',sans-serif", fontWeight: 400, fontSize: 16, color: "#71717a", margin: 0, maxWidth: 360 }}>
+            Ứng dụng được thiết kế cho màn hình ngang. Hãy xoay máy tính bảng để tiếp tục.
+          </p>
+        </div>
+      )}
     </>
   );
 }

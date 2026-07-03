@@ -209,7 +209,14 @@ export default function PosLenDonScreen({ allItems, onAdjust, onBack, onCancel, 
                       <div onClick={onBack} className="bg-[#f4f4f5] flex-[1_0_0] h-[70px] min-w-px relative rounded-[14px] cursor-pointer hover:bg-gray-200 transition-colors">
                         <div className="flex flex-row items-center justify-center size-full">
                           <div className="content-stretch flex gap-[14px] items-center justify-center px-[28px] relative size-full">
-                            <p className="font-['Inter:Medium',sans-serif] font-medium leading-[42px] text-[#27272a] text-[28px] whitespace-nowrap">← Trở về</p>
+                            <div className="overflow-clip relative shrink-0 size-[42px]">
+                              <div className="absolute inset-[16.68%]">
+                                <svg className="absolute block inset-0 size-full" fill="none" preserveAspectRatio="none" viewBox="0 0 27.9911 27.992">
+                                  <path d={svgPaths.pdf7580} fill="#27272A" />
+                                </svg>
+                              </div>
+                            </div>
+                            <p className="font-['Inter:Medium',sans-serif] font-medium leading-[42px] text-[#27272a] text-[28px] whitespace-nowrap">Trở về</p>
                           </div>
                         </div>
                       </div>
