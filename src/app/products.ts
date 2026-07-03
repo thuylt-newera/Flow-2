@@ -17,7 +17,7 @@ export const PRODUCTS: Product[] = [
   { name: "Tương ớt Chinsu chai 250g",                           price: 18000,  img: imgP3 },
   { name: "Mì Kokomi Pro canh chua nam bộ",                      price: 5000,   img: imgP4 },
   { name: "Kokomi pro canh chua Nam Bộ 82g",                     price: 138000, img: imgP5 },
-  { name: "Mì tô khoai tây Omachi lẩu tôm càng",                price: 248000, img: imgP6 },
+  { name: "Bupnon Tea 365 Trà Hương Chanh Sả",                  price: 11200,  img: imgP6 },
 ];
 
 export function formatPrice(n: number) {
