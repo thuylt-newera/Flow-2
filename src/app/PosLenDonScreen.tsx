@@ -195,8 +195,11 @@ export default function PosLenDonScreen({ allItems, onAdjust, onBack, onCancel, 
               <div className="content-stretch drop-shadow-[0px_-8px_8px_rgba(0,0,0,0.03)] flex flex-col items-start overflow-clip relative shrink-0 w-full">
                 <div className="bg-white relative shrink-0 w-full">
                   <div className="content-stretch flex items-center justify-between px-[28px] py-[21px] relative w-full">
-                    <div className="flex gap-[7px] items-center whitespace-nowrap">
-                      <p className="font-['Inter:Semi_Bold',sans-serif] font-semibold leading-[49px] text-[31.5px] text-black">Tổng tiền:</p>
+                    <div className="flex gap-[10.5px] items-baseline whitespace-nowrap">
+                      <p className="font-['Inter:Semi_Bold',sans-serif] font-semibold leading-[49px] text-[31.5px] text-black">Tổng tiền</p>
+                      {hasProducts && (
+                        <p className="font-['Inter:Medium',sans-serif] font-medium leading-[42px] text-[24.5px] text-[#71717a]">· {allItems.reduce((s, { qty }) => s + qty, 0)} sản phẩm</p>
+                      )}
                     </div>
                     <p className="font-['Inter:Semi_Bold',sans-serif] font-semibold leading-[42px] text-[#dc2626] text-[28px] text-center whitespace-nowrap">
                       {hasProducts ? `${formatPrice(allItems.reduce((s, { price, qty }) => s + price * qty, 0))}₫` : "Chưa có"}
