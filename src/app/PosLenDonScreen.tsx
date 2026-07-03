@@ -129,11 +129,12 @@ export default function PosLenDonScreen({ allItems, onAdjust, onBack, onCancel, 
                         <div className="relative shrink-0 size-[168px]">
                           <img alt="" className="absolute inset-0 max-w-none object-cover pointer-events-none size-full" src={imgEmpty} />
                         </div>
-                        <p className="font-['Inter:Medium',sans-serif] font-medium leading-[49px] text-[31.5px] text-black whitespace-nowrap">Chưa thêm sản phẩm nào</p>
-                        <div className="bg-white flex gap-[10.5px] h-[56px] items-center justify-center px-[17.5px] relative rounded-[14px] shrink-0 cursor-pointer hover:bg-gray-50 active:opacity-75 transition-colors">
-                          <div aria-hidden className="absolute border border-[#a1a1aa] border-solid inset-0 pointer-events-none rounded-[14px]" />
-                          <Plus size={24} color="black" />
-                          <p className="font-['Inter:Medium',sans-serif] font-medium leading-[35px] text-black text-[24.5px] whitespace-nowrap">Thêm sản phẩm</p>
+                        <div className="flex flex-col gap-[7px] items-center">
+                          <p className="font-['Inter:Medium',sans-serif] font-medium leading-[49px] text-[31.5px] text-[#71717a] whitespace-nowrap">Chưa có sản phẩm nào</p>
+                          <div className="flex gap-[10.5px] h-[56px] items-center justify-center px-[17.5px] relative rounded-[14px] shrink-0 cursor-pointer hover:bg-[#fef2f2] active:opacity-75 transition-colors">
+                            <Plus size={24} color="#dc2626" />
+                            <p className="font-['Inter:Medium',sans-serif] font-medium leading-[35px] text-[#dc2626] text-[24.5px] whitespace-nowrap">Thêm sản phẩm</p>
+                          </div>
                         </div>
                       </div>
                     ) : (
@@ -229,7 +230,11 @@ export default function PosLenDonScreen({ allItems, onAdjust, onBack, onCancel, 
                       </div>
                     </div>
                     {/* Tiếp tục */}
-                    <div onClick={onContinue} className="flex-[1_0_0] h-[70px] min-w-px relative rounded-[14px] cursor-pointer shadow-[0px_1px_2px_0px_rgba(26,26,26,0.05)] hover:opacity-90 transition-opacity" style={{ backgroundImage: "linear-gradient(90deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.1) 100%), linear-gradient(90deg, rgb(220,38,38) 0%, rgb(220,38,38) 100%)" }}>
+                    <div
+                      onClick={hasProducts ? onContinue : undefined}
+                      className={`flex-[1_0_0] h-[70px] min-w-px relative rounded-[14px] shadow-[0px_1px_2px_0px_rgba(26,26,26,0.05)] transition-opacity ${hasProducts ? "cursor-pointer hover:opacity-90" : "cursor-not-allowed opacity-50"}`}
+                      style={{ backgroundImage: "linear-gradient(90deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.1) 100%), linear-gradient(90deg, rgb(220,38,38) 0%, rgb(220,38,38) 100%)" }}
+                    >
                       <div className="flex flex-row items-center justify-center overflow-clip rounded-[inherit] size-full">
                         <p className="font-['Inter:Medium',sans-serif] font-medium leading-[42px] text-[28px] text-white whitespace-nowrap">Tiếp tục</p>
                       </div>

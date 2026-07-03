@@ -120,7 +120,6 @@ export default function App() {
   const [screen, setScreen] = useState<Screen>("home");
   const [showDialog, setShowDialog] = useState(false);
   const [orderItems, setOrderItems] = useState<OrderItem[]>([]);
-  const [showToast, setShowToast] = useState(false);
   const [showSheet, setShowSheet] = useState(false);
   const [showAddProduct, setShowAddProduct] = useState(false);
   const [inventoryToast, setInventoryToast] = useState(false);
@@ -167,7 +166,6 @@ export default function App() {
   };
 
   const allLiveItems = liveOrderItems;
-  const toastTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   useEffect(() => {
     function update() {
@@ -184,12 +182,6 @@ export default function App() {
       window.removeEventListener("orientationchange", update);
     };
   }, []);
-
-  const triggerToast = () => {
-    setShowToast(true);
-    if (toastTimerRef.current) clearTimeout(toastTimerRef.current);
-    toastTimerRef.current = setTimeout(() => setShowToast(false), 2500);
-  };
 
   const handleClick = (e: React.MouseEvent) => {
     const target = e.target as Element;
@@ -221,7 +213,6 @@ export default function App() {
 
       const brandBtn = target.closest('[data-name="Brand Button"]');
       if (getText(brandBtn).includes("Thêm sản phẩm")) { setShowSheet(true); return; }
-      if (getText(brandBtn).includes("Tiếp tục")) { triggerToast(); return; }
     }
   };
 
@@ -274,7 +265,6 @@ export default function App() {
                 onBack={() => { setScreen("home"); setPrevRevenue(revenue); }}
                 onCancel={() => setShowDialog(true)}
                 onContinue={() => {
-                  if (liveOrderItems.length === 0) { triggerToast(); return; }
                   setOrderItems(liveOrderItems.map(({ id: _id, ...rest }) => rest as OrderItem));
                   setScreen("thanh-toan");
                 }}
@@ -398,24 +388,6 @@ export default function App() {
             {showDialog && (
               <div style={{ position: "absolute", inset: 0, zIndex: 50 }}>
                 <Dialog />
-              </div>
-            )}
-
-            {/* Validation toast — Manual-area, above the bottom bar */}
-            {showToast && (
-              <div
-                style={{
-                  position: "absolute",
-                  bottom: TOAST_BOTTOM_WITH_BAR,
-                  left: MANUAL_CENTER_X,
-                  transform: "translateX(-50%)",
-                  zIndex: 80,
-                  pointerEvents: "none",
-                }}
-              >
-                <div className="bg-black flex items-center overflow-clip px-[28px] py-[21px] rounded-[14px] shadow-[0px_4px_6px_-4px_rgba(26,26,26,0.05),0px_10px_15px_-3px_rgba(26,26,26,0.05)]">
-                  <p className="font-['Inter:Semi_Bold',sans-serif] font-semibold leading-[42px] text-[28px] text-white whitespace-nowrap">Vui lòng thêm sản phẩm</p>
-                </div>
               </div>
             )}
           </div>
