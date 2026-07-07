@@ -8,8 +8,13 @@
       <meta name="apple-mobile-web-app-capable" content="yes" />
       <meta name="mobile-web-app-capable" content="yes" />
       <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-      <title>Create this page</title>
-      <meta name="description" content="This web application offers a seamless user interface for managing tasks, enhancing productivity for individuals and teams with its intuitive design." />
+      <meta name="apple-mobile-web-app-title" content="Bán hàng" />
+      <meta name="theme-color" content="#dc2626" />
+      <link rel="manifest" href="manifest.webmanifest" />
+      <link rel="apple-touch-icon" href="apple-touch-icon.png" />
+      <link rel="icon" type="image/png" href="icon-192.png" />
+      <title>Tạp hóa dì Thư</title>
+      <meta name="description" content="Ứng dụng bán hàng POS cho tạp hóa." />
       <meta name="robots" content="noindex, nofollow" />
       <style>
         html, body {
@@ -38,7 +43,14 @@
       
       <div id="root"></div>
       <script type="module" src="/src/main.tsx"></script>
-      
+      <script>
+        if ("serviceWorker" in navigator) {
+          window.addEventListener("load", function () {
+            navigator.serviceWorker.register("sw.js").catch(function () {});
+          });
+        }
+      </script>
+
     </body>
   </html>
   

@@ -169,6 +169,10 @@ export default function App() {
 
   useEffect(() => {
     function update() {
+      // Skip rescaling while typing: the on-screen keyboard shrinks the
+      // viewport height, which would otherwise shrink the whole canvas.
+      const active = document.activeElement;
+      if (active && (active.tagName === "INPUT" || active.tagName === "TEXTAREA")) return;
       const vw = window.innerWidth;
       const vh = window.innerHeight;
       setViewport({ w: vw, h: vh });
