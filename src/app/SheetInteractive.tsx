@@ -96,9 +96,10 @@ export default function SheetInteractive({ onClose, onConfirm, onCreateNew, quan
         </div>
         <div
           onClick={(e) => { e.stopPropagation(); onCreateNew(); }}
-          className="shrink-0 h-[70px] px-[28px] flex items-center justify-center rounded-[21px] cursor-pointer transition-opacity hover:opacity-90 active:opacity-75"
+          className="shrink-0 h-[70px] px-[28px] flex gap-[10.5px] items-center justify-center rounded-[21px] cursor-pointer transition-opacity hover:opacity-90 active:opacity-75"
           style={{ backgroundImage: "linear-gradient(90deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.1) 100%), linear-gradient(90deg, rgb(220,38,38) 0%, rgb(220,38,38) 100%)" }}
         >
+          <Plus size={28} color="white" />
           <p className="font-['Inter:Medium',sans-serif] font-medium leading-[42px] text-[28px] text-white whitespace-nowrap">Tạo mới</p>
         </div>
       </div>
